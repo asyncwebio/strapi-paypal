@@ -1,6 +1,6 @@
 {
   "name": "strapi-paypal",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Online payments and subscriptions made simple, secure and fast.This free plugin enables you to accept online payments and create subscriptions using Paypal,Credit Card, on your Strapi app via Paypal.",
   "strapi": {
     "name": "strapi-paypal",
@@ -21,10 +21,10 @@
     "email": "support@asyncweb.io",
     "url": "https://higheredlab.com/"
   },
-  "homepage": "https://github.com/manishkatyan/strapi-stripe#readme",
+  "homepage": "https://github.com/AsyncWeb/strapi-paypal#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/manishkatyan/strapi-stripe.git"
+    "url": "https://github.com/AsyncWeb/strapi-paypal.git"
   },
   "maintainers": [
     {

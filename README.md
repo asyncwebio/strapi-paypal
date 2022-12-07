@@ -9,7 +9,7 @@
 
 <p align="center">
   <a href="https://www.npmjs.com/package/strapi-paypal">
-<img alt="GitHub package.json version" src="https://img.shields.io/github/package-json/v/manishkatyan/strapi-paypal?label=npm&logo=npm">
+<img alt="GitHub package.json version" src="https://img.shields.io/github/package-json/v/AsyncWeb/strapi-paypal?label=npm&logo=npm">
 </a>
 <a href="https://www.npmjs.org/package/strapi-paypal">
 <img src="https://img.shields.io/npm/dm/strapi-paypal.svg" alt="Monthly download on NPM" />
