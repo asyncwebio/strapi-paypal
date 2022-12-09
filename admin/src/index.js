@@ -1,10 +1,10 @@
-import { prefixPluginTranslations } from "@strapi/helper-plugin";
-import pluginPkg from "../../package.json";
-import pluginId from "./pluginId";
-import Initializer from "./components/Initializer";
-import PluginIcon from "./components/PluginIcon";
+/* eslint-disable no-unused-vars */
+import { prefixPluginTranslations } from '@strapi/helper-plugin';
+import pluginId from './pluginId';
+import Initializer from './components/Initializer';
+import PluginIcon from './components/PluginIcon';
 
-const name = "Paypal";
+const name = 'Paypal';
 
 export default {
   register(app) {
@@ -16,9 +16,7 @@ export default {
         defaultMessage: name,
       },
       Component: async () => {
-        const component = await import(
-          /* webpackChunkName: "[request]" */ "./pages/App"
-        );
+        const component = await import(/* webpackChunkName: "[request]" */ './pages/App');
 
         return component;
       },
@@ -35,21 +33,21 @@ export default {
         id: pluginId,
         intlLabel: {
           id: `${pluginId}.plugin.name`,
-          defaultMessage: "paypal",
+          defaultMessage: 'paypal',
         },
       },
       [
         {
           intlLabel: {
             id: `${pluginId}.plugin.name`,
-            defaultMessage: "Configuration",
+            defaultMessage: 'Configuration',
           },
-          id: "Paypal-Configuration",
+          id: 'Paypal-Configuration',
           to: `/settings/${pluginId}`,
           // permissions: pluginPermissions.settingsRoles,
           Component: async () => {
             const component = await import(
-              /* webpackChunkName: "stripe-page" */ "./pages/Settings"
+              /* webpackChunkName: "stripe-page" */ './pages/Settings'
             );
 
             return component;
@@ -68,7 +66,7 @@ export default {
   bootstrap(app) {},
   async registerTrads({ locales }) {
     const importedTrads = await Promise.all(
-      locales.map((locale) => {
+      locales.map(locale => {
         return import(
           /* webpackChunkName: "translation-[request]" */ `./translations/${locale}.json`
         )

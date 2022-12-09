@@ -1,9 +1,9 @@
-"use strict";
+/* eslint-disable node/no-extraneous-require */
+'use strict';
 
-const { ApplicationError } = require("@strapi/utils").errors;
-const axiosInstance = require("axios");
+const axiosInstance = require('axios');
 
-module.exports = ({ strapi }) => ({
+module.exports = () => ({
   // creating paypal order
   async createOrder(
     title,
@@ -17,13 +17,13 @@ module.exports = ({ strapi }) => ({
   ) {
     // get access token
     const data = {
-      intent: "CAPTURE",
+      intent: 'CAPTURE',
       application_context: {
         return_url: checkoutSuccessUrl,
         cancel_url: checkoutCancelUrl,
-        brand_name: "EXAMPLE INC",
-        locale: "en-US",
-        landing_page: "BILLING",
+        brand_name: 'EXAMPLE INC',
+        locale: 'en-US',
+        landing_page: 'BILLING',
       },
       purchase_units: [
         {
@@ -36,26 +36,22 @@ module.exports = ({ strapi }) => ({
       items: [
         {
           name: title,
-          description: description,
+          description,
           unit_amount: {
             currency_code: currency,
             value: productPrice,
           },
-          quantity: "1",
+          quantity: '1',
         },
       ],
     };
 
-    const response = await axiosInstance.post(
-      `${url}/v2/checkout/orders`,
-      data,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const response = await axiosInstance.post(`${url}/v2/checkout/orders`, data, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+    });
 
     return response.data;
   },

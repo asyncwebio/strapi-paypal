@@ -1,16 +1,17 @@
-"use strict";
+/* eslint-disable node/no-extraneous-require */
+'use strict';
 
-const { ApplicationError } = require("@strapi/utils").errors;
-const axiosInstance = require("axios");
-const qs = require("qs");
-const moment = require("moment");
+const { ApplicationError } = require('@strapi/utils').errors;
+const axiosInstance = require('axios');
+const qs = require('qs');
+const moment = require('moment');
 
 module.exports = ({ strapi }) => ({
   // get paypal access token
   async getAccessToken() {
     const { settings, paypalSandBoxUrl, paypalLiveUrl } = await strapi
-      .plugin("strapi-paypal")
-      .service("paypalService")
+      .plugin('strapi-paypal')
+      .service('paypalService')
       .initialize();
 
     const {
@@ -27,11 +28,11 @@ module.exports = ({ strapi }) => ({
 
     const pluginStore = strapi.store({
       environment: strapi.config.environment,
-      type: "plugin",
-      name: "strapi-paypal",
+      type: 'plugin',
+      name: 'strapi-paypal',
     });
-    const sandboxAuth = await pluginStore.get({ key: "sandboxAuth" });
-    const liveAuth = await pluginStore.get({ key: "liveAuth" });
+    const sandboxAuth = await pluginStore.get({ key: 'sandboxAuth' });
+    const liveAuth = await pluginStore.get({ key: 'liveAuth' });
 
     let authentication;
     const today = new Date();
@@ -46,13 +47,13 @@ module.exports = ({ strapi }) => ({
           authentication = sandboxAuth.access_token;
         } else {
           const response = await axiosInstance({
-            method: "post",
+            method: 'post',
             url: `${url}/v1/oauth2/token`,
             headers: {
-              "Content-Type": "application/x-www-form-urlencoded",
+              'Content-Type': 'application/x-www-form-urlencoded',
             },
             data: qs.stringify({
-              grant_type: "client_credentials",
+              grant_type: 'client_credentials',
             }),
             auth: {
               username: clientId,
@@ -60,33 +61,27 @@ module.exports = ({ strapi }) => ({
             },
           });
           await pluginStore.set({
-            key: "sandboxAuth",
+            key: 'sandboxAuth',
             value: {
               access_token: response.data.access_token,
-              expires_in: new Date(
-                Date.now() + response.data.expires_in * 1000
-              ),
+              expires_in: new Date(Date.now() + response.data.expires_in * 1000),
             },
           });
           authentication = response.data.access_token;
         }
         break;
       case true:
-        if (
-          liveAuth &&
-          liveAuth.access_token &&
-          moment(liveAuth.expires_in).isAfter(today)
-        ) {
+        if (liveAuth && liveAuth.access_token && moment(liveAuth.expires_in).isAfter(today)) {
           authentication = liveAuth.access_token;
         } else {
           const response = await axiosInstance({
-            method: "post",
+            method: 'post',
             url: `${url}/v1/oauth2/token`,
             headers: {
-              "Content-Type": "application/x-www-form-urlencoded",
+              'Content-Type': 'application/x-www-form-urlencoded',
             },
             data: qs.stringify({
-              grant_type: "client_credentials",
+              grant_type: 'client_credentials',
             }),
             auth: {
               username: clientId,
@@ -94,19 +89,17 @@ module.exports = ({ strapi }) => ({
             },
           });
           await pluginStore.set({
-            key: "liveAuth",
+            key: 'liveAuth',
             value: {
               access_token: response.data.access_token,
-              expires_in: new Date(
-                Date.now() + response.data.expires_in * 1000
-              ),
+              expires_in: new Date(Date.now() + response.data.expires_in * 1000),
             },
           });
           authentication = response.data.access_token;
         }
         break;
       default:
-        throw new ApplicationError("Invalid paypal mode");
+        throw new ApplicationError('Invalid paypal mode');
     }
     return authentication;
   },

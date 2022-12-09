@@ -1,27 +1,24 @@
-"use strict";
+/* eslint-disable node/no-extraneous-require */
 
-const { ApplicationError } = require("@strapi/utils").errors;
-const axiosInstance = require("axios");
+'use strict';
 
-module.exports = ({ strapi }) => ({
+const axiosInstance = require('axios');
+
+module.exports = () => ({
   // creating paypal product
   async createProduct(title, description, productType, accessToken, url) {
     const data = {
       name: title,
-      description: description,
+      description,
       type: productType,
     };
 
-    const response = await axiosInstance.post(
-      `${url}/v1/catalogs/products`,
-      data,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const response = await axiosInstance.post(`${url}/v1/catalogs/products`, data, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+    });
 
     return response.data;
   },
@@ -40,25 +37,25 @@ module.exports = ({ strapi }) => ({
     checkoutCancelUrl
   ) {
     let paymentIntervalUnit;
-    if (paymentInterval === "YEAR") {
+    if (paymentInterval === 'YEAR') {
       paymentIntervalUnit = 1;
-    } else if (paymentInterval === "MONTH") {
+    } else if (paymentInterval === 'MONTH') {
       paymentIntervalUnit = 12;
-    } else if (paymentInterval === "WEEK") {
+    } else if (paymentInterval === 'WEEK') {
       paymentIntervalUnit = 52;
     }
 
     const data = {
       product_id: productId,
       name: title,
-      description: description,
+      description,
       billing_cycles: [
         {
           frequency: {
             interval_unit: paymentInterval,
             interval_count: 1,
           },
-          tenure_type: "REGULAR",
+          tenure_type: 'REGULAR',
           sequence: 1,
           total_cycles: paymentIntervalUnit,
           pricing_scheme: {
@@ -80,7 +77,7 @@ module.exports = ({ strapi }) => ({
     const response = await axiosInstance.post(`${url}/v1/billing/plans`, data, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     });
     return response.data;
@@ -92,16 +89,12 @@ module.exports = ({ strapi }) => ({
       plan_id: planId,
     };
 
-    const response = await axiosInstance.post(
-      `${url}/v1/billing/subscriptions`,
-      data,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const response = await axiosInstance.post(`${url}/v1/billing/subscriptions`, data, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+    });
     return response.data;
   },
 
@@ -120,13 +113,7 @@ module.exports = ({ strapi }) => ({
     checkoutCancelUrl,
     currency
   ) {
-    const product = await this.createProduct(
-      title,
-      description,
-      productType,
-      accessToken,
-      url
-    );
+    const product = await this.createProduct(title, description, productType, accessToken, url);
     let plan;
     if (product.id)
       plan = await this.createPlan(
@@ -143,12 +130,7 @@ module.exports = ({ strapi }) => ({
       );
     //subscription
     let subscription;
-    if (plan)
-      subscription = await this.createSubscriptionPlan(
-        plan.id,
-        accessToken,
-        url
-      );
+    if (plan) subscription = await this.createSubscriptionPlan(plan.id, accessToken, url);
 
     return subscription;
   },
