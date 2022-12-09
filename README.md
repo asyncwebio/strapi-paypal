@@ -14,6 +14,9 @@
 <a href="https://www.npmjs.org/package/strapi-paypal">
 <img src="https://img.shields.io/npm/dm/strapi-paypal.svg" alt="Monthly download on NPM" />
 </a>
+<a href="https://github.com/AsyncWeb/strapi-paypal/actions/workflows/eslint.yml/badge.svg">
+<img src="https://github.com/AsyncWeb/strapi-paypal//actions/workflows/eslint.yml/badge.svg" alt="EsLint" />
+</a>
 </p>
 
 <br>
