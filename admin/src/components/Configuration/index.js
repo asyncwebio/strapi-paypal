@@ -6,51 +6,47 @@
  *
  */
 
-import React, { useState, useEffect } from "react";
-import { SettingsPageTitle } from "@strapi/helper-plugin";
-import Check from "@strapi/icons/Check";
-import { Box } from "@strapi/design-system/Box";
-import { Button } from "@strapi/design-system/Button";
-import { Grid, GridItem } from "@strapi/design-system/Grid";
-import { HeaderLayout, ContentLayout } from "@strapi/design-system/Layout";
-import { Main } from "@strapi/design-system/Main";
-import { TextInput } from "@strapi/design-system/TextInput";
-import { Typography } from "@strapi/design-system/Typography";
-import { Alert } from "@strapi/design-system/Alert";
-import { Select, Option } from "@strapi/design-system/Select";
-import { Link } from "@strapi/design-system/Link";
-import { Switch } from "@strapi/design-system/Switch";
-import { Flex } from "@strapi/design-system/Flex";
-import currencies from "./constant";
-import {
-  savePaypalConfiguration,
-  getPaypalConfiguration,
-} from "../../utils/apiCalls";
+import React, { useState, useEffect } from 'react';
+import { SettingsPageTitle } from '@strapi/helper-plugin';
+import Check from '@strapi/icons/Check';
+import { Box } from '@strapi/design-system/Box';
+import { Button } from '@strapi/design-system/Button';
+import { Grid, GridItem } from '@strapi/design-system/Grid';
+import { HeaderLayout, ContentLayout } from '@strapi/design-system/Layout';
+import { Main } from '@strapi/design-system/Main';
+import { TextInput } from '@strapi/design-system/TextInput';
+import { Typography } from '@strapi/design-system/Typography';
+import { Alert } from '@strapi/design-system/Alert';
+import { Select, Option } from '@strapi/design-system/Select';
+import { Switch } from '@strapi/design-system/Switch';
+import { Flex } from '@strapi/design-system/Flex';
+import currencies from './constant';
+import { savePaypalConfiguration, getPaypalConfiguration } from '../../utils/apiCalls';
 
 const Configuration = () => {
   const [paypalConfiguration, setPaypalConfiguration] = useState({
     isLiveMode: false,
-    livePaypalClientId: "",
-    livePaypalSecret: "",
-    testPaypalClientId: "",
-    testPaypalSecret: "",
-    checkoutSuccessUrl: "",
-    checkoutCancelUrl: "",
+    livePaypalClientId: '',
+    livePaypalSecret: '',
+    testPaypalClientId: '',
+    testPaypalSecret: '',
+    checkoutSuccessUrl: '',
+    checkoutCancelUrl: '',
     currency: undefined,
-    callbackUrl: "",
+    callbackUrl: '',
   });
 
   const [showAlert, setShowAlert] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [error, setError] = useState({
-    livePaypalClientId: "",
-    livePaypalSecret: "",
-    testPaypalClientId: "",
-    testPaypalSecret: "",
-    checkoutSuccessUrl: "",
-    checkoutCancelUrl: "",
-    currency: "",
+    livePaypalClientId: '',
+    livePaypalSecret: '',
+    testPaypalClientId: '',
+    testPaypalSecret: '',
+    checkoutSuccessUrl: '',
+    checkoutCancelUrl: '',
+    currency: '',
   });
 
   useEffect(() => {
@@ -85,27 +81,27 @@ const Configuration = () => {
     })();
   }, []);
 
-  const handleChangeCurrency = (value) => {
+  const handleChangeCurrency = value => {
     setPaypalConfiguration({ ...paypalConfiguration, currency: value });
-    setError({ ...error, currency: "" });
+    setError({ ...error, currency: '' });
   };
 
-  const handleChange = (event) => {
+  const handleChange = event => {
     const { name, value } = event.target;
     setPaypalConfiguration({ ...paypalConfiguration, [name]: value });
 
-    if (name === "livePaypalClientId") {
-      setError({ ...error, livePaypalClientId: "" });
-    } else if (name === "livePaypalSecret") {
-      setError({ ...error, livePaypalSecret: "" });
-    } else if (name === "testPaypalClientId") {
-      setError({ ...error, testPaypalClientId: "" });
-    } else if (name === "testPaypalSecret") {
-      setError({ ...error, testPaypalSecret: "" });
-    } else if (name === "checkoutSuccessUrl") {
-      setError({ ...error, checkoutSuccessUrl: "" });
-    } else if (name === "checkoutCancelUrl") {
-      setError({ ...error, checkoutCancelUrl: "" });
+    if (name === 'livePaypalClientId') {
+      setError({ ...error, livePaypalClientId: '' });
+    } else if (name === 'livePaypalSecret') {
+      setError({ ...error, livePaypalSecret: '' });
+    } else if (name === 'testPaypalClientId') {
+      setError({ ...error, testPaypalClientId: '' });
+    } else if (name === 'testPaypalSecret') {
+      setError({ ...error, testPaypalSecret: '' });
+    } else if (name === 'checkoutSuccessUrl') {
+      setError({ ...error, checkoutSuccessUrl: '' });
+    } else if (name === 'checkoutCancelUrl') {
+      setError({ ...error, checkoutCancelUrl: '' });
     }
   };
 
@@ -123,55 +119,55 @@ const Configuration = () => {
     ) {
       setError({
         ...error,
-        livePaypalClientId: "Live Stripe Publishable Key is required",
-        livePaypalSecret: "Live Stripe Secret Key is required",
-        testPaypalClientId: "Test Stripe Publishable Key is required",
-        testPaypalSecret: "Test Stripe Secret Key is required",
-        checkoutSuccessUrl: "Checkout Success Page URL is required",
-        checkoutCancelUrl: "Checkout Cancel Page URL is required",
-        currency: "Currency is required",
+        livePaypalClientId: 'Live Stripe Publishable Key is required',
+        livePaypalSecret: 'Live Stripe Secret Key is required',
+        testPaypalClientId: 'Test Stripe Publishable Key is required',
+        testPaypalSecret: 'Test Stripe Secret Key is required',
+        checkoutSuccessUrl: 'Checkout Success Page URL is required',
+        checkoutCancelUrl: 'Checkout Cancel Page URL is required',
+        currency: 'Currency is required',
       });
       setIsSubmitting(false);
     } else if (!paypalConfiguration.livePaypalClientId) {
       setError({
         ...error,
-        livePaypalClientId: "Live Stripe Publishable Key is required",
+        livePaypalClientId: 'Live Stripe Publishable Key is required',
       });
       setIsSubmitting(false);
     } else if (!paypalConfiguration.livePaypalSecret) {
       setError({
         ...error,
-        livePaypalSecret: "Live Stripe Secret Key is required",
+        livePaypalSecret: 'Live Stripe Secret Key is required',
       });
       setIsSubmitting(false);
     } else if (!paypalConfiguration.testPaypalClientId) {
       setError({
         ...error,
-        testPaypalClientId: "Test Stripe Publishable Key is required",
+        testPaypalClientId: 'Test Stripe Publishable Key is required',
       });
       setIsSubmitting(false);
     } else if (!paypalConfiguration.testPaypalSecret) {
       setError({
         ...error,
-        testPaypalSecret: "Test Stripe Secret Key is required",
+        testPaypalSecret: 'Test Stripe Secret Key is required',
       });
       setIsSubmitting(false);
     } else if (!paypalConfiguration.checkoutSuccessUrl) {
       setError({
         ...error,
-        checkoutSuccessUrl: "Checkout Success Page URL is required",
+        checkoutSuccessUrl: 'Checkout Success Page URL is required',
       });
       setIsSubmitting(false);
     } else if (!paypalConfiguration.checkoutCancelUrl) {
       setError({
         ...error,
-        checkoutCancelUrl: "Checkout Cancel Page URL is required",
+        checkoutCancelUrl: 'Checkout Cancel Page URL is required',
       });
       setIsSubmitting(false);
     } else if (!paypalConfiguration.currency) {
       setError({
         ...error,
-        currency: "Currency is required",
+        currency: 'Currency is required',
       });
       setIsSubmitting(false);
     } else {
@@ -216,7 +212,7 @@ const Configuration = () => {
               saved successfully.
             </Alert>
           ) : (
-            ""
+            ''
           )}
         </Box>
         <Box
@@ -232,9 +228,7 @@ const Configuration = () => {
             <Typography variant="delta">Credentials</Typography>
           </Box>
           <Box paddingBottom={2} paddingTop={1}>
-            <Typography variant="omega">
-              Configure your Paypal Client id and secret.
-            </Typography>
+            <Typography variant="omega">Configure your Paypal Client id and secret.</Typography>
           </Box>
           <Box paddingTop={2}>
             <Grid gap={4}>
@@ -270,9 +264,7 @@ const Configuration = () => {
                     placeholder="Live Paypal Client Id"
                     required
                     value={paypalConfiguration.livePaypalClientId}
-                    error={
-                      error.livePaypalClientId ? error.livePaypalClientId : ""
-                    }
+                    error={error.livePaypalClientId ? error.livePaypalClientId : ''}
                     onChange={handleChange}
                   />
                 </Box>
@@ -285,7 +277,7 @@ const Configuration = () => {
                     label="Live Paypal Secret"
                     required
                     value={paypalConfiguration.livePaypalSecret}
-                    error={error.livePaypalSecret ? error.livePaypalSecret : ""}
+                    error={error.livePaypalSecret ? error.livePaypalSecret : ''}
                     onChange={handleChange}
                   />
                 </Box>
@@ -298,9 +290,7 @@ const Configuration = () => {
                     label="SandBox Paypal Client Id"
                     required
                     value={paypalConfiguration.testPaypalClientId}
-                    error={
-                      error.testPaypalClientId ? error.testPaypalClientId : ""
-                    }
+                    error={error.testPaypalClientId ? error.testPaypalClientId : ''}
                     onChange={handleChange}
                   />
                 </Box>
@@ -313,7 +303,7 @@ const Configuration = () => {
                     label="SandBox Paypal Secret"
                     required
                     value={paypalConfiguration.testPaypalSecret}
-                    error={error.testPaypalSecret ? error.testPaypalSecret : ""}
+                    error={error.testPaypalSecret ? error.testPaypalSecret : ''}
                     onChange={handleChange}
                   />
                 </Box>
@@ -344,9 +334,7 @@ const Configuration = () => {
                     label="Payment Success Page URL"
                     required
                     value={paypalConfiguration.checkoutSuccessUrl}
-                    error={
-                      error.checkoutSuccessUrl ? error.checkoutSuccessUrl : ""
-                    }
+                    error={error.checkoutSuccessUrl ? error.checkoutSuccessUrl : ''}
                     onChange={handleChange}
                     hint="Redirects to the success page after the  payment successful"
                   />
@@ -359,9 +347,7 @@ const Configuration = () => {
                     label="Payment Cancel Page URL"
                     required
                     value={paypalConfiguration.checkoutCancelUrl}
-                    error={
-                      error.checkoutCancelUrl ? error.checkoutCancelUrl : ""
-                    }
+                    error={error.checkoutCancelUrl ? error.checkoutCancelUrl : ''}
                     onChange={handleChange}
                     hint="Redirects to the cancel page after the  payment failed"
                   />
@@ -375,14 +361,14 @@ const Configuration = () => {
                     required
                     placeholder="Choose Currency"
                     clearLabel="Clear the Currency"
-                    error={error.currency ? error.currency : ""}
+                    error={error.currency ? error.currency : ''}
                     onClear={() =>
                       setPaypalConfiguration({
                         ...paypalConfiguration,
                         currency: undefined,
                       })
                     }
-                    onChange={(value) => handleChangeCurrency(value)}
+                    onChange={value => handleChangeCurrency(value)}
                     value={paypalConfiguration.currency}
                   >
                     {currencies &&
@@ -422,9 +408,7 @@ const Configuration = () => {
           <Box paddingTop={2}>
             <Grid gap={4}>
               <GridItem col={6} s={12}>
-                <Typography variant="pi">
-                  Need help? Contact us at : support@asyncweb.io
-                </Typography>
+                <Typography variant="pi">Need help? Contact us at : support@asyncweb.io</Typography>
               </GridItem>
             </Grid>
           </Box>

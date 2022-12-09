@@ -4,32 +4,29 @@
  *
  */
 
-import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
-import { Box } from "@strapi/design-system/Box";
-import { Typography } from "@strapi/design-system/Typography";
-import { Divider } from "@strapi/design-system/Divider";
-import { Alert } from "@strapi/design-system/Alert";
-import CreateProduct from "../CreateProduct";
-import ProductTable from "./productTable";
+import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+import { Box } from '@strapi/design-system/Box';
+import { Typography } from '@strapi/design-system/Typography';
+import { Divider } from '@strapi/design-system/Divider';
+import { Alert } from '@strapi/design-system/Alert';
+import CreateProduct from '../CreateProduct';
+import ProductTable from './productTable';
 import {
   getPaypalProduct,
   createPaypalProduct,
-  updatePaypalProduct,
   getPaypalConfiguration,
-} from "../../utils/apiCalls";
-import EditProduct from "./editProduct";
+} from '../../utils/apiCalls';
 
 const limit = 5;
 const ProductList = () => {
   const search = useLocation().search;
-  const page = new URLSearchParams(search).get("page");
+  const page = new URLSearchParams(search).get('page');
   const pageNumber = page ? parseInt(page, 10) : 1;
 
   const [isVisible, setIsVisible] = useState(false);
   const [productData, setProductData] = useState();
-  const [isEditVisible, setEditVisible] = useState(false);
-  const [productId, setProductId] = useState();
+  const [isEditVisible] = useState(false);
   const [count, setCount] = useState();
   const [sortAscendingName, setSortAscendingName] = useState(true);
   const [sortAscendingPrice, setSortAscendingPrice] = useState(true);
@@ -37,7 +34,7 @@ const ProductList = () => {
   const [sortOrderPrice, setSortOrderPrice] = useState(false);
   const [isPaypalSettings, setIsPaypalSettings] = useState(false);
   const [isAlert, setIsAlert] = useState(false);
-  const [message, setMessage] = useState("");
+  const [message] = useState('');
 
   const offset = pageNumber === 1 ? 0 : (pageNumber - 1) * limit;
 
@@ -55,11 +52,11 @@ const ProductList = () => {
       }
 
       if (sortOrderName) {
-        sort = "name";
-        order = sortAscendingName ? "asc" : "desc";
+        sort = 'name';
+        order = sortAscendingName ? 'asc' : 'desc';
       } else if (sortOrderPrice) {
-        sort = "price";
-        order = sortAscendingPrice ? "asc" : "desc";
+        sort = 'price';
+        order = sortAscendingPrice ? 'asc' : 'desc';
       }
 
       const response = await getPaypalProduct(offset, limit, sort, order);
@@ -119,46 +116,11 @@ const ProductList = () => {
     setSortOrderPrice(true);
   };
 
-  const handleEnableEditMode = async (id) => {
-    setProductId(id);
-    setEditVisible(true);
-  };
-
-  const handleCloseEditModal = () => {
-    setEditVisible(false);
-  };
-
-  const handleUpdateProduct = async (
-    productId,
-    title,
-    url,
-    description,
-    paypalProductId
-  ) => {
-    try {
-      const updateProduct = await updatePaypalProduct(
-        productId,
-        title,
-        url,
-        description,
-        paypalProductId
-      );
-
-      if (updateProduct?.data?.id) {
-        setEditVisible(false);
-      }
-    } catch (error) {
-      setEditVisible(false);
-      setIsAlert(true);
-      setMessage(error.response.data.error.message);
-    }
-  };
-
   const handleCloseAlert = () => {
     setIsAlert(false);
   };
 
-  const handleClickCreateProduct = () => setIsVisible((prev) => !prev);
+  const handleClickCreateProduct = () => setIsVisible(prev => !prev);
 
   return (
     <Box>
@@ -166,8 +128,8 @@ const ProductList = () => {
         <Typography variant="alpha">Paypal</Typography>
         <Box>
           <Typography variant="omega">
-            The payment plugin enables you to accept online payments using
-            Credit Card on your Strapi website or app via Paypal.
+            The payment plugin enables you to accept online payments using Credit Card on your
+            Strapi website or app via Paypal.
           </Typography>
         </Box>
       </Box>
@@ -195,41 +157,15 @@ const ProductList = () => {
           )
         }
       />
-      <EditProduct
-        productId={productId}
-        isEditVisible={isEditVisible}
-        handleCloseEdit={handleCloseEditModal}
-        handleClickUpdateEdit={(
-          productId,
-          title,
-          url,
-          description,
-          productImageId,
-          stripeProductId
-        ) =>
-          handleUpdateProduct(
-            productId,
-            title,
-            url,
-            description,
-            productImageId,
-            stripeProductId
-          )
-        }
-      />
+
       {isAlert ? (
         <Box paddingLeft={6} paddingRight={6}>
-          <Alert
-            closeLabel="Close alert"
-            title="Error"
-            variant="danger"
-            onClose={handleCloseAlert}
-          >
+          <Alert closeLabel="Close alert" title="Error" variant="danger" onClose={handleCloseAlert}>
             {message}
           </Alert>
         </Box>
       ) : (
-        ""
+        ''
       )}
 
       <Box>
@@ -237,7 +173,6 @@ const ProductList = () => {
           products={productData}
           handleSortAscendingName={handleSortAscendingName}
           handleSortDescendingName={handleSortDescendingName}
-          handleEditClick={(id) => handleEnableEditMode(id)}
           totalCount={Math.ceil(count / limit)}
           page={pageNumber}
           sortAscendingName={sortAscendingName}
