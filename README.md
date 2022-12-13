@@ -3,7 +3,7 @@
 </div>
 <h1 align="center">Paypal Payments</h1>
 <p align="center">Online payments and subscriptions made simple, secure and fast.</p>
-<p align="center">This free plugin enables you to accept online payments and create subscriptions using Paypal account,Credit Card pay on your Strapi app via Paypal.</p>
+<p align="center">This free plugin enables you to accept online payments and create subscriptions using Paypal account or Credit/Debit card on your Strapi app via Paypal.</p>
 
 <br />
 
