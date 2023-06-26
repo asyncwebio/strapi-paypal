@@ -1,3 +1,4 @@
+// @ts-nocheck
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable react-hooks/exhaustive-deps */
 /**
@@ -9,27 +10,32 @@
 import React, { useState, useEffect } from 'react';
 import { SettingsPageTitle } from '@strapi/helper-plugin';
 import Check from '@strapi/icons/Check';
-import { Box } from '@strapi/design-system/Box';
-import { Button } from '@strapi/design-system/Button';
-import { Grid, GridItem } from '@strapi/design-system/Grid';
-import { HeaderLayout, ContentLayout } from '@strapi/design-system/Layout';
-import { Main } from '@strapi/design-system/Main';
-import { TextInput } from '@strapi/design-system/TextInput';
-import { Typography } from '@strapi/design-system/Typography';
-import { Alert } from '@strapi/design-system/Alert';
-import { Select, Option } from '@strapi/design-system/Select';
-import { Switch } from '@strapi/design-system/Switch';
-import { Flex } from '@strapi/design-system/Flex';
+import {
+  Box,
+  Button,
+  Grid,
+  GridItem,
+  HeaderLayout,
+  ContentLayout,
+  Main,
+  TextInput,
+  Typography,
+  Alert,
+  Select,
+  Switch,
+  Flex,
+  SingleSelect,
+  SingleSelectOption,
+} from '@strapi/design-system';
+
 import currencies from './constant';
 import { savePaypalConfiguration, getPaypalConfiguration } from '../../utils/apiCalls';
+
+const apiToken = process.env.STRAPI_ADMIN_API_TOKEN;
 
 const Configuration = () => {
   const [paypalConfiguration, setPaypalConfiguration] = useState({
     isLiveMode: false,
-    livePaypalClientId: '',
-    livePaypalSecret: '',
-    testPaypalClientId: '',
-    testPaypalSecret: '',
     checkoutSuccessUrl: '',
     checkoutCancelUrl: '',
     currency: undefined,
@@ -40,10 +46,6 @@ const Configuration = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [error, setError] = useState({
-    livePaypalClientId: '',
-    livePaypalSecret: '',
-    testPaypalClientId: '',
-    testPaypalSecret: '',
     checkoutSuccessUrl: '',
     checkoutCancelUrl: '',
     currency: '',
@@ -51,27 +53,14 @@ const Configuration = () => {
 
   useEffect(() => {
     (async () => {
-      const response = await getPaypalConfiguration();
+      const response = await getPaypalConfiguration(apiToken);
 
       if (response.data?.response) {
-        const {
-          isLiveMode,
-          livePaypalClientId,
-          livePaypalSecret,
-          testPaypalClientId,
-          testPaypalSecret,
-          checkoutSuccessUrl,
-          checkoutCancelUrl,
-          currency,
-          callbackUrl,
-        } = response.data.response;
+        const { isLiveMode, checkoutSuccessUrl, checkoutCancelUrl, currency, callbackUrl } =
+          response.data.response;
         setPaypalConfiguration({
           ...paypalConfiguration,
           isLiveMode,
-          livePaypalClientId,
-          livePaypalSecret,
-          testPaypalClientId,
-          testPaypalSecret,
           checkoutSuccessUrl,
           checkoutCancelUrl,
           currency,
@@ -90,15 +79,7 @@ const Configuration = () => {
     const { name, value } = event.target;
     setPaypalConfiguration({ ...paypalConfiguration, [name]: value });
 
-    if (name === 'livePaypalClientId') {
-      setError({ ...error, livePaypalClientId: '' });
-    } else if (name === 'livePaypalSecret') {
-      setError({ ...error, livePaypalSecret: '' });
-    } else if (name === 'testPaypalClientId') {
-      setError({ ...error, testPaypalClientId: '' });
-    } else if (name === 'testPaypalSecret') {
-      setError({ ...error, testPaypalSecret: '' });
-    } else if (name === 'checkoutSuccessUrl') {
+    if (name === 'checkoutSuccessUrl') {
       setError({ ...error, checkoutSuccessUrl: '' });
     } else if (name === 'checkoutCancelUrl') {
       setError({ ...error, checkoutCancelUrl: '' });
@@ -109,47 +90,15 @@ const Configuration = () => {
     setIsSubmitting(true);
 
     if (
-      !paypalConfiguration.livePaypalClientId &&
-      !paypalConfiguration.livePaypalSecret &&
-      !paypalConfiguration.testPaypalClientId &&
-      !paypalConfiguration.testPaypalSecret &&
       !paypalConfiguration.checkoutSuccessUrl &&
       !paypalConfiguration.checkoutCancelUrl &&
       !paypalConfiguration.currency
     ) {
       setError({
         ...error,
-        livePaypalClientId: 'Live Stripe Publishable Key is required',
-        livePaypalSecret: 'Live Stripe Secret Key is required',
-        testPaypalClientId: 'Test Stripe Publishable Key is required',
-        testPaypalSecret: 'Test Stripe Secret Key is required',
         checkoutSuccessUrl: 'Checkout Success Page URL is required',
         checkoutCancelUrl: 'Checkout Cancel Page URL is required',
         currency: 'Currency is required',
-      });
-      setIsSubmitting(false);
-    } else if (!paypalConfiguration.livePaypalClientId) {
-      setError({
-        ...error,
-        livePaypalClientId: 'Live Stripe Publishable Key is required',
-      });
-      setIsSubmitting(false);
-    } else if (!paypalConfiguration.livePaypalSecret) {
-      setError({
-        ...error,
-        livePaypalSecret: 'Live Stripe Secret Key is required',
-      });
-      setIsSubmitting(false);
-    } else if (!paypalConfiguration.testPaypalClientId) {
-      setError({
-        ...error,
-        testPaypalClientId: 'Test Stripe Publishable Key is required',
-      });
-      setIsSubmitting(false);
-    } else if (!paypalConfiguration.testPaypalSecret) {
-      setError({
-        ...error,
-        testPaypalSecret: 'Test Stripe Secret Key is required',
       });
       setIsSubmitting(false);
     } else if (!paypalConfiguration.checkoutSuccessUrl) {
@@ -171,7 +120,7 @@ const Configuration = () => {
       });
       setIsSubmitting(false);
     } else {
-      const response = await savePaypalConfiguration(paypalConfiguration);
+      const response = await savePaypalConfiguration(paypalConfiguration, apiToken);
 
       if (response.data.ok) {
         setShowAlert(true);
@@ -215,6 +164,7 @@ const Configuration = () => {
             ''
           )}
         </Box>
+
         <Box
           shadow="tableShadow"
           background="neutral0"
@@ -224,12 +174,10 @@ const Configuration = () => {
           paddingBottom={6}
           hasRadius
         >
-          <Box>
-            <Typography variant="delta">Credentials</Typography>
+          <Box paddingBottom={2}>
+            <Typography variant="delta">Global Setting</Typography>
           </Box>
-          <Box paddingBottom={2} paddingTop={1}>
-            <Typography variant="omega">Configure your Paypal Client id and secret.</Typography>
-          </Box>
+
           <Box paddingTop={2}>
             <Grid gap={4}>
               <GridItem col={12} s={12}>
@@ -255,74 +203,7 @@ const Configuration = () => {
                   </Flex>
                 </Box>
               </GridItem>
-
-              <GridItem col={6} s={12}>
-                <Box paddingTop={2} paddingBottom={3}>
-                  <TextInput
-                    name="livePaypalClientId"
-                    label="Live Paypal Client Id"
-                    placeholder="Live Paypal Client Id"
-                    required
-                    value={paypalConfiguration.livePaypalClientId}
-                    error={error.livePaypalClientId ? error.livePaypalClientId : ''}
-                    onChange={handleChange}
-                  />
-                </Box>
-              </GridItem>
-              <GridItem col={6} s={12}>
-                <Box paddingTop={2} paddingBottom={3}>
-                  <TextInput
-                    name="livePaypalSecret"
-                    placeholder="Live Paypal Secret"
-                    label="Live Paypal Secret"
-                    required
-                    value={paypalConfiguration.livePaypalSecret}
-                    error={error.livePaypalSecret ? error.livePaypalSecret : ''}
-                    onChange={handleChange}
-                  />
-                </Box>
-              </GridItem>
-              <GridItem col={6} s={12}>
-                <Box paddingBottom={2}>
-                  <TextInput
-                    name="testPaypalClientId"
-                    placeholder="SandBox Paypal Client Id"
-                    label="SandBox Paypal Client Id"
-                    required
-                    value={paypalConfiguration.testPaypalClientId}
-                    error={error.testPaypalClientId ? error.testPaypalClientId : ''}
-                    onChange={handleChange}
-                  />
-                </Box>
-              </GridItem>
-              <GridItem col={6} s={12}>
-                <Box paddingBottom={2}>
-                  <TextInput
-                    name="testPaypalSecret"
-                    placeholder="SandBox Paypal Secret"
-                    label="SandBox Paypal Secret"
-                    required
-                    value={paypalConfiguration.testPaypalSecret}
-                    error={error.testPaypalSecret ? error.testPaypalSecret : ''}
-                    onChange={handleChange}
-                  />
-                </Box>
-              </GridItem>
             </Grid>
-          </Box>
-        </Box>
-        <br />
-        <Box
-          shadow="tableShadow"
-          background="neutral0"
-          paddingTop={6}
-          paddingLeft={7}
-          paddingRight={7}
-          paddingBottom={6}
-          hasRadius
-        >
-          <Box paddingBottom={2}>
-            <Typography variant="delta">Global Setting</Typography>
           </Box>
 
           <Box paddingTop={2}>
@@ -355,7 +236,7 @@ const Configuration = () => {
               </GridItem>
               <GridItem col={6} s={12}>
                 <Box paddingBottom={2}>
-                  <Select
+                  <SingleSelect
                     id="select1"
                     label="Choose Currency"
                     required
@@ -373,11 +254,11 @@ const Configuration = () => {
                   >
                     {currencies &&
                       currencies.map((currency, idx) => (
-                        <Option value={currency.value} key={idx}>
+                        <SingleSelectOption value={currency.value} key={idx}>
                           {currency.label}
-                        </Option>
+                        </SingleSelectOption>
                       ))}
-                  </Select>
+                  </SingleSelect>
                 </Box>
               </GridItem>
               <GridItem col={6} s={12}>

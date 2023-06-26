@@ -6,7 +6,8 @@ module.exports = [
     path: '/updateSettings',
     handler: 'configurationController.updateSetting',
     config: {
-      policies: ['admin::isAuthenticatedAdmin'],
+      auth: false,
+      policies: ['plugin::strapi-paypal.apiToken'],
     },
   },
   {
@@ -14,7 +15,8 @@ module.exports = [
     path: '/getSettings',
     handler: 'configurationController.getSetting',
     config: {
-      policies: ['admin::isAuthenticatedAdmin'],
+      auth: false,
+      policies: ['plugin::strapi-paypal.apiToken'],
     },
   },
   {
@@ -23,6 +25,7 @@ module.exports = [
     handler: 'paypalController.createProduct',
     config: {
       auth: false,
+      policies: ['plugin::strapi-paypal.apiToken'],
     },
   },
   {
@@ -31,6 +34,7 @@ module.exports = [
     handler: 'paypalController.findProducts',
     config: {
       auth: false,
+      policies: ['plugin::strapi-paypal.apiToken'],
     },
   },
 
@@ -40,6 +44,7 @@ module.exports = [
     handler: 'paypalController.findProductById',
     config: {
       auth: false,
+      policies: ['plugin::strapi-paypal.apiToken'],
     },
   },
   {

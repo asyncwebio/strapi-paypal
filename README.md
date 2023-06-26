@@ -68,14 +68,14 @@ Please refer to the official Strapi installation requirement doc here: [Installa
 
 **Minimum environment requirements**
 
-- Node.js `>=14.x.x`
-- NPM `>=6.x.x`
+- Node.js `>=18.x.x`
+- NPM `>=8.x.x`
 
 We are following the [official Node.js releases timelines](https://nodejs.org/en/about/releases/).
 
 **Supported Strapi versions**:
 
-- Strapi v4.5.0 (recently tested)
+- Strapi v4.11.0 (recently tested)
 
 - Strapi v4.x
 
@@ -96,28 +96,20 @@ npm i strapi-paypal
 After successful installation please add the below enviornment variables in `.env` files
 
 ```bash
-PAYPAL_SANDBOX_API_URL=https://api-m.sandbox.paypal.com
-PAYPAL_LIVE_API_URL=https://api-m.paypal.com
+STRAPI_ADMIN_API_TOKEN=*your strapi api token*
+STRAPI_ADMIN_PAYPAL_SANDBOX_API_URL=https://api-m.sandbox.paypal.com
+STRAPI_ADMIN_PAYPAL_LIVE_API_URL=https://api-m.paypal.com
+STRAPI_ADMIN_LIVE_PAYPAL_CLIENT_ID=*your live paypal client id*
+STRAPI_ADMIN_LIVE_PAYPAL_CLIENT_SECRET=*your live paypal client secret*
+STRAPI_ADMIN_SANDBOX_PAYPAL_CLIENT_ID=*your sandbox paypal client id*
+STRAPI_ADMIN_SANDBOX_PAYPAL_CLIENT_SECRET=*your sandbox paypal client secret*
 ```
 
-After adding enviornment variables `.env` files, goto Config &gt; `plugins.js` &gt; Add the following code snippet.
+> Note: You can get the STRAPI_ADMIN_API_TOKEN from your Strapi Admin Panel. Go to ` Settings -> Global settings ->API Tokens -> Create new API Token`. Make Sure to Select `Token duration-> Unlimited` and `Token type -> Full Access` and save it Copy the token and add it in .env file.
 
-```bash
-module.exports = ({ env }) => ({
-  // ...
-  "strapi-paypal": {
-    enabled: true,
-    config: {
-      paypalSandBoxUrl:
-        env("PAYPAL_SANDBOX_API_URL") || "https://api-m.sandbox.paypal.com",
-      paypalLiveUrl: env("PAYPAL_LIVE_API_URL") || "https://api-m.paypal.com",
-    },
-  },
-  // ...
-});
+> Note: Please Make sure to add the .env variables and verify them before starting the server.
 
-```
-
+<br/>
 Afterwards, you would need to build a fresh package that includes the Translator plugin. For it, please execute the commands below:
 
 ```bash
@@ -146,7 +138,7 @@ You can easily configure the Paypal Payments plugin to connect with your Paypal 
 - Click on Save to save the Paypal configuration.
 
 <br/><br/>
-<img style="width: 100%; height: auto;" src="static/paypal-configuration.gif" alt="paypal-Configuration" />
+<img style="width: 100%; height: auto;" src="static/paypal-configuration.png" alt="paypal-Configuration" />
 <br/><br/>
 
 <br/>
