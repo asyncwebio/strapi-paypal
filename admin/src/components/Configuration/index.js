@@ -21,7 +21,6 @@ import {
   TextInput,
   Typography,
   Alert,
-  Select,
   Switch,
   Flex,
   SingleSelect,

@@ -6,7 +6,7 @@ module.exports = {
     'prettier',
     'plugin:import/errors',
     'plugin:import/warnings',
-    // 'plugin:node/recommended',
+    'plugin:node/recommended',
     // 'plugin:jsdoc/recommended',
   ],
   plugins: ['jsdoc'],
