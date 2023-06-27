@@ -2,10 +2,16 @@
 
 'use strict';
 
+// @ts-ignore
 const { ApplicationError } = require('@strapi/utils').errors;
 const axiosInstance = require('axios');
 const qs = require('qs');
 const moment = require('moment');
+
+const livePaypalClientId = process.env.STRAPI_ADMIN_LIVE_PAYPAL_CLIENT_ID;
+const livePaypalSecret = process.env.STRAPI_ADMIN_LIVE_PAYPAL_CLIENT_SECRET;
+const testPaypalClientId = process.env.STRAPI_ADMIN_SANDBOX_PAYPAL_CLIENT_ID;
+const testPaypalSecret = process.env.STRAPI_ADMIN_SANDBOX_PAYPAL_CLIENT_SECRET;
 
 module.exports = ({ strapi }) => ({
   // get paypal access token
@@ -15,13 +21,7 @@ module.exports = ({ strapi }) => ({
       .service('paypalService')
       .initialize();
 
-    const {
-      isLiveMode,
-      livePaypalClientId,
-      livePaypalSecret,
-      testPaypalClientId,
-      testPaypalSecret,
-    } = settings;
+    const { isLiveMode } = settings;
 
     const clientId = isLiveMode ? livePaypalClientId : testPaypalClientId;
     const secret = isLiveMode ? livePaypalSecret : testPaypalSecret;
@@ -47,6 +47,7 @@ module.exports = ({ strapi }) => ({
         ) {
           authentication = sandboxAuth.access_token;
         } else {
+          // @ts-ignore
           const response = await axiosInstance({
             method: 'post',
             url: `${url}/v1/oauth2/token`,
@@ -75,6 +76,7 @@ module.exports = ({ strapi }) => ({
         if (liveAuth && liveAuth.access_token && moment(liveAuth.expires_in).isAfter(today)) {
           authentication = liveAuth.access_token;
         } else {
+          // @ts-ignore
           const response = await axiosInstance({
             method: 'post',
             url: `${url}/v1/oauth2/token`,

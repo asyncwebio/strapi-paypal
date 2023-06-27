@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  *
  * This component is the responsible for displaying all the created Products.
@@ -6,10 +7,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Box } from '@strapi/design-system/Box';
-import { Typography } from '@strapi/design-system/Typography';
-import { Divider } from '@strapi/design-system/Divider';
-import { Alert } from '@strapi/design-system/Alert';
+import { Box, Typography, Divider, Alert } from '@strapi/design-system';
 import CreateProduct from '../CreateProduct';
 import ProductTable from './productTable';
 import {
@@ -17,6 +15,8 @@ import {
   createPaypalProduct,
   getPaypalConfiguration,
 } from '../../utils/apiCalls';
+
+const apiToken = process.env.STRAPI_ADMIN_API_TOKEN;
 
 const limit = 5;
 const ProductList = () => {
@@ -43,7 +43,7 @@ const ProductList = () => {
       let sort;
       let order;
 
-      const setting = await getPaypalConfiguration();
+      const setting = await getPaypalConfiguration(apiToken);
 
       if (setting.data.response) {
         setIsPaypalSettings(true);
@@ -59,7 +59,7 @@ const ProductList = () => {
         order = sortAscendingPrice ? 'asc' : 'desc';
       }
 
-      const response = await getPaypalProduct(offset, limit, sort, order);
+      const response = await getPaypalProduct(offset, limit, sort, order, apiToken);
 
       setProductData(response.data.response);
       setCount(response.data.count);
@@ -70,21 +70,26 @@ const ProductList = () => {
     setIsVisible(false);
   };
 
-  const handleSaveProduct = async (
-    title,
-    price,
-    description,
-    isSubscription,
-    paymentInterval,
-    trialPeriodDays
-  ) => {
+  const handleSaveProduct = async data => {
+    const {
+      title,
+      price,
+      description,
+      isSubscription,
+      paymentInterval,
+      trialPeriodDays,
+      productType,
+    } = data;
+
     const createProduct = await createPaypalProduct(
       title,
       price,
       description,
       isSubscription,
       paymentInterval,
-      trialPeriodDays
+      trialPeriodDays,
+      productType,
+      apiToken
     );
 
     if (createProduct?.data?.id) {
@@ -94,14 +99,14 @@ const ProductList = () => {
 
   const handleSortAscendingName = () => {
     setSortAscendingName(true);
-    sortOrderName(true);
-    sortOrderPrice(false);
+    setSortOrderName(true);
+    setSortOrderPrice(false);
   };
 
   const handleSortDescendingName = () => {
     setSortAscendingName(false);
-    sortOrderName(true);
-    sortOrderPrice(false);
+    setSortOrderName(true);
+    setSortOrderPrice(false);
   };
 
   const handleSortAscendingPrice = () => {
@@ -139,23 +144,7 @@ const ProductList = () => {
       <CreateProduct
         isVisible={isVisible}
         handleClose={handleCloseModal}
-        handleClickSave={(
-          title,
-          price,
-          description,
-          isSubscription,
-          paymentInterval,
-          trialPeriodDays
-        ) =>
-          handleSaveProduct(
-            title,
-            price,
-            description,
-            isSubscription,
-            paymentInterval,
-            trialPeriodDays
-          )
-        }
+        handleClickSave={data => handleSaveProduct(data)}
       />
 
       {isAlert ? (

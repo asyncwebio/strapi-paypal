@@ -1,17 +1,17 @@
-import instance from "./axiosInstance";
+import createInstance from './axiosInstance';
 
-const axios = instance;
-
-export async function savePaypalConfiguration(data) {
-  const response = await axios.put("/strapi-paypal/updateSettings", {
+export async function savePaypalConfiguration(data, apiToken) {
+  const axios = createInstance(apiToken);
+  const response = await axios.put('/strapi-paypal/updateSettings', {
     data,
   });
 
   return response;
 }
 
-export async function getPaypalConfiguration() {
-  const response = await axios.get("/strapi-paypal/getSettings");
+export async function getPaypalConfiguration(apiToken) {
+  const axios = createInstance(apiToken);
+  const response = await axios.get('/strapi-paypal/getSettings');
 
   return response;
 }
@@ -23,9 +23,11 @@ export async function createPaypalProduct(
   isSubscription,
   paymentInterval,
   trialPeriodDays,
-  productType
+  productType,
+  apiToken
 ) {
-  const response = await axios.post("/strapi-paypal/createProduct", {
+  const axios = createInstance(apiToken);
+  const response = await axios.post('/strapi-paypal/createProduct', {
     title,
     price,
     description,
@@ -38,15 +40,15 @@ export async function createPaypalProduct(
   return response;
 }
 
-export async function getPaypalProduct(offset, limit, sort, order) {
-  const response = await axios.get(
-    `/strapi-paypal/getProduct/${offset}/${limit}/${sort}/${order}`
-  );
+export async function getPaypalProduct(offset, limit, sort, order, apiToken) {
+  const axios = createInstance(apiToken);
+  const response = await axios.get(`/strapi-paypal/getProduct/${offset}/${limit}/${sort}/${order}`);
 
   return response;
 }
 
-export async function getPaypalProductById(id) {
+export async function getPaypalProductById(id, apiToken) {
+  const axios = createInstance(apiToken);
   const response = await axios.get(`/strapi-paypal/getProduct/${id}`);
 
   return response;
@@ -58,8 +60,10 @@ export async function updatePaypalProduct(
   url,
   description,
   productImage,
-  stripeProductId
+  stripeProductId,
+  apiToken
 ) {
+  const axios = createInstance(apiToken);
   const response = await axios.put(`/strapi-paypal/updateProduct/${id}`, {
     title,
     url,
@@ -71,24 +75,11 @@ export async function updatePaypalProduct(
   return response;
 }
 
-export async function getProductPayments(
-  productId,
-  sort,
-  order,
-  offset,
-  limit
-) {
+export async function getProductPayments(productId, sort, order, offset, limit, apiToken) {
+  const axios = createInstance(apiToken);
   const response = await axios.get(
     `/strapi-paypal/getPayments/${productId}/${sort}/${order}/${offset}/${limit}`
   );
-
-  return response;
-}
-
-export async function uploadFiles(files) {
-  const formDocument = new FormData();
-  formDocument.append("files", files[0]);
-  const response = await axios.post(`/upload`, formDocument);
 
   return response;
 }

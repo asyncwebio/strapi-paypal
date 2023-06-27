@@ -1,33 +1,20 @@
-"use strict";
+'use strict';
 
 module.exports = {
   async updateSetting(ctx) {
-    const {
-      isLiveMode,
-      livePaypalClientId,
-      livePaypalSecret,
-      testPaypalClientId,
-      testPaypalSecret,
-      checkoutSuccessUrl,
-      checkoutCancelUrl,
-      currency,
-      callbackUrl,
-    } = ctx.request.body.data;
+    const { isLiveMode, checkoutSuccessUrl, checkoutCancelUrl, currency, callbackUrl } =
+      ctx.request.body.data;
 
     const pluginStore = strapi.store({
       environment: strapi.config.environment,
-      type: "plugin",
-      name: "strapi-paypal",
+      type: 'plugin',
+      name: 'strapi-paypal',
     });
 
     const response = await pluginStore.set({
-      key: "paypalSetting",
+      key: 'paypalSetting',
       value: {
         isLiveMode,
-        livePaypalClientId,
-        livePaypalSecret,
-        testPaypalClientId,
-        testPaypalSecret,
         checkoutSuccessUrl,
         checkoutCancelUrl,
         currency,
@@ -39,10 +26,10 @@ module.exports = {
   async getSetting(ctx) {
     const pluginStore = strapi.store({
       environment: strapi.config.environment,
-      type: "plugin",
-      name: "strapi-paypal",
+      type: 'plugin',
+      name: 'strapi-paypal',
     });
-    const response = await pluginStore.get({ key: "paypalSetting" });
+    const response = await pluginStore.get({ key: 'paypalSetting' });
     return ctx.send({ ok: true, response });
   },
 };

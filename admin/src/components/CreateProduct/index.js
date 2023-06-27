@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  *
  * This component is the responsible for opening modal when the Add Product
@@ -5,84 +6,83 @@
  *
  */
 
-import React, { useState } from "react";
-import PropTypes from "prop-types";
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import {
   ModalLayout,
   ModalBody,
   ModalHeader,
   ModalFooter,
-} from "@strapi/design-system/ModalLayout";
-import { Box } from "@strapi/design-system/Box";
-import { Flex } from "@strapi/design-system/Flex";
-import { Button } from "@strapi/design-system/Button";
-import { Typography } from "@strapi/design-system/Typography";
-import { Grid, GridItem } from "@strapi/design-system/Grid";
-import { TextInput } from "@strapi/design-system/TextInput";
-import { Select, Option } from "@strapi/design-system/Select";
-import { NumberInput } from "@strapi/design-system/NumberInput";
-import { Textarea } from "@strapi/design-system/Textarea";
+  Box,
+  Button,
+  Grid,
+  GridItem,
+  Flex,
+  Typography,
+  TextInput,
+  SingleSelect,
+  SingleSelectOption,
+  NumberInput,
+  Textarea,
+} from '@strapi/design-system';
 
 const CreateProduct = ({ isVisible, handleClose, handleClickSave }) => {
-  const [title, setTitle] = useState("");
+  const [title, setTitle] = useState('');
   const [price, setPrice] = useState();
-  const [paymentType, setPaymentType] = useState("");
+  const [paymentType, setPaymentType] = useState('');
   const [isSubscription, setIsSubscription] = useState(false);
-  const [description, setDescription] = useState("");
-  const [paymentInterval, setPaymentInterval] = useState("");
+  const [description, setDescription] = useState('');
+  const [paymentInterval, setPaymentInterval] = useState('');
   const [trialPeriodDays, setTrialPeriodDays] = useState();
-  const [productType, setProductType] = useState("");
-  const [heading, setHeading] = useState("Product");
+  const [productType, setProductType] = useState('');
+  const [heading, setHeading] = useState('Product');
   const [error, setError] = useState({
-    title: "",
-    price: "",
-    description: "",
-    paymentType: "",
-    paymentInterval: "",
-    productType: "",
+    title: '',
+    price: '',
+    description: '',
+    paymentType: '',
+    paymentInterval: '',
+    productType: '',
   });
 
-  const handleChange = (event) => {
+  const handleChange = event => {
     const { name, value } = event.target;
 
-    if (name === "title") {
+    if (name === 'title') {
       setTitle(value);
-      setError({ ...error, title: "" });
-    } else if (name === "description") {
-      setDescription(value);
-      setError({ ...error, description: "" });
+      setError({ ...error, title: '' });
     }
   };
 
-  const handleChangePaymentType = (value) => {
+  const handleChangePaymentType = value => {
     setPaymentType(value);
-    setError({ ...error, paymentType: "" });
+    setError({ ...error, paymentType: '' });
 
-    if (value === "subscription") {
+    if (value === 'subscription') {
       setIsSubscription(true);
-      setHeading("Subscription");
+      setHeading('Subscription');
     } else {
       setIsSubscription(false);
-      setHeading("Product");
+      setHeading('Product');
     }
   };
 
-  const handleChangeProductType = (value) => {
+  const handleChangeProductType = value => {
     setProductType(value);
-    setError({ ...error, productType: "" });
+    setError({ ...error, productType: '' });
   };
 
-  const handleChangePaymentInterval = (value) => {
+  const handleChangePaymentInterval = value => {
     setPaymentInterval(value);
-    setError({ ...error, paymentInterval: "" });
+    setError({ ...error, paymentInterval: '' });
   };
 
-  const handleChangeNumber = (value) => {
+  const handleChangeNumber = value => {
     setPrice(value);
-    setError({ ...error, price: "" });
+    setError({ ...error, price: '' });
   };
 
-  const handleChangeTrialPeriod = (value) => {
+  const handleChangeTrialPeriod = value => {
     setTrialPeriodDays(value);
   };
 
@@ -90,91 +90,91 @@ const CreateProduct = ({ isVisible, handleClose, handleClickSave }) => {
     if (!title && !price && !description && !paymentType) {
       setError({
         ...error,
-        title: "Title is required",
-        price: "Price is required",
-        description: "Description is required",
-        paymentType: "Payment Type is required",
-        paymentInterval: "",
-        productType: "",
+        title: 'Title is required',
+        price: 'Price is required',
+        description: 'Description is required',
+        paymentType: 'Payment Type is required',
+        paymentInterval: '',
+        productType: '',
       });
     } else if (!paymentType) {
       setError({
         ...error,
-        title: "",
-        price: "",
-        description: "",
-        paymentType: "Payment Type is required",
-        paymentInterval: "",
-        productType: "",
+        title: '',
+        price: '',
+        description: '',
+        paymentType: 'Payment Type is required',
+        paymentInterval: '',
+        productType: '',
       });
     } else if (!price) {
       setError({
         ...error,
-        title: "",
-        price: "Price is required",
-        description: "",
-        paymentType: "",
-        paymentInterval: "",
-        productType: "",
+        title: '',
+        price: 'Price is required',
+        description: '',
+        paymentType: '',
+        paymentInterval: '',
+        productType: '',
       });
     } else if (!title) {
       setError({
         ...error,
-        title: "Title is required",
-        price: "",
-        description: "",
-        paymentType: "",
-        paymentInterval: "",
-        productType: "",
+        title: 'Title is required',
+        price: '',
+        description: '',
+        paymentType: '',
+        paymentInterval: '',
+        productType: '',
       });
     } else if (!description) {
       setError({
         ...error,
-        title: "",
-        price: "",
-        description: "Description is required",
-        paymentType: "",
-        paymentInterval: "",
-        productType: "",
+        title: '',
+        price: '',
+        description: 'Description is required',
+        paymentType: '',
+        paymentInterval: '',
+        productType: '',
       });
     } else if (isSubscription && !productType) {
       setError({
         ...error,
-        title: "",
-        price: "",
-        description: "",
-        paymentType: "",
-        paymentInterval: "",
-        productType: "product Type is required",
+        title: '',
+        price: '',
+        description: '',
+        paymentType: '',
+        paymentInterval: '',
+        productType: 'product Type is required',
       });
     } else if (isSubscription && !paymentInterval) {
       setError({
         ...error,
-        title: "",
-        price: "",
-        description: "",
-        paymentType: "",
-        paymentInterval: "Payment Interval is required",
-        productType: "",
+        title: '',
+        price: '',
+        description: '',
+        paymentType: '',
+        paymentInterval: 'Payment Interval is required',
+        productType: '',
       });
     } else {
-      handleClickSave(
+      handleClickSave({
         title,
         price,
         description,
         isSubscription,
         paymentInterval,
         trialPeriodDays,
-        productType
-      );
-      setTitle("");
+        productType,
+      });
+      setTitle('');
       setPrice();
-      setDescription("");
+      setDescription('');
       setIsSubscription(false);
-      setPaymentInterval("");
-      setTrialPeriodDays("");
-      setPaymentType("");
-      setProductType("");
+      setPaymentInterval('');
+      setTrialPeriodDays('');
+      setPaymentType('');
+      setProductType('');
     }
   };
 
@@ -196,9 +196,9 @@ const CreateProduct = ({ isVisible, handleClose, handleClickSave }) => {
 
               <Box>
                 <Typography variant="omega">
-                  {heading === "Product"
-                    ? "For a product, you would charge your customer only one-time."
-                    : "For a subscription, you would charge your customer every month."}
+                  {heading === 'Product'
+                    ? 'For a product, you would charge your customer only one-time.'
+                    : 'For a subscription, you would charge your customer every month.'}
                 </Typography>
               </Box>
             </Flex>
@@ -206,28 +206,28 @@ const CreateProduct = ({ isVisible, handleClose, handleClickSave }) => {
           <ModalBody>
             <Grid gap={5}>
               <GridItem col={6}>
-                <Select
+                <SingleSelect
                   id="select1"
                   label="Payment Type"
                   required
                   clearLabel="Clear the payment type"
                   hint="Ex:One-Time or Subscription"
-                  error={error.paymentType ? error.paymentType : ""}
-                  onClear={() => setPaymentType("")}
-                  onChange={(value) => handleChangePaymentType(value)}
+                  error={error.paymentType ? error.paymentType : ''}
+                  onClear={() => setPaymentType('')}
+                  onChange={value => handleChangePaymentType(value)}
                   value={paymentType}
                 >
-                  <Option value="oneTime">One-Time</Option>
-                  <Option value="subscription">Subscription</Option>
-                </Select>
+                  <SingleSelectOption value="oneTime">One-Time</SingleSelectOption>
+                  <SingleSelectOption value="subscription">Subscription</SingleSelectOption>
+                </SingleSelect>
               </GridItem>
               <GridItem col={6}>
                 <NumberInput
                   label="Price"
                   name="price"
-                  onValueChange={(value) => handleChangeNumber(value)}
+                  onValueChange={value => handleChangeNumber(value)}
                   value={price}
-                  error={error.price ? error.price : ""}
+                  error={error.price ? error.price : ''}
                   required
                 />
               </GridItem>
@@ -236,32 +236,32 @@ const CreateProduct = ({ isVisible, handleClose, handleClickSave }) => {
                   label="Title"
                   name="title"
                   onChange={handleChange}
-                  error={error.title ? error.title : ""}
+                  error={error.title ? error.title : ''}
                   required
                 />
               </GridItem>
               <GridItem col={6}>
                 {isSubscription ? (
-                  <Select
+                  <SingleSelect
                     id="select2"
                     label="Product Type"
                     required={isSubscription}
                     disabled={!isSubscription}
                     clearLabel="Clear the product type"
                     hint="Ex:Product type:physical,digital,service"
-                    error={error.productType ? error.productType : ""}
-                    onClear={() => setProductType("")}
-                    onChange={(value) => handleChangeProductType(value)}
+                    error={error.productType ? error.productType : ''}
+                    onClear={() => setProductType('')}
+                    onChange={value => handleChangeProductType(value)}
                     value={productType}
                   >
-                    <Option value="PHYSICAL">Physical goods</Option>
-                    <Option value="DIGITAL"> Digital goods</Option>
-                    <Option value="SERVICE">
+                    <SingleSelectOption value="PHYSICAL">Physical goods</SingleSelectOption>
+                    <SingleSelectOption value="DIGITAL"> Digital goods</SingleSelectOption>
+                    <SingleSelectOption value="SERVICE">
                       Service(Example:technical support,online courses)
-                    </Option>
-                  </Select>
+                    </SingleSelectOption>
+                  </SingleSelect>
                 ) : (
-                  ""
+                  ''
                 )}
               </GridItem>
 
@@ -269,8 +269,11 @@ const CreateProduct = ({ isVisible, handleClose, handleClickSave }) => {
                 <Textarea
                   label="Description"
                   name="description"
-                  onChange={handleChange}
-                  error={error.description ? error.description : ""}
+                  onChange={e => {
+                    setDescription(e.target.value);
+                    setError({ ...error, description: '' });
+                  }}
+                  error={error.description ? error.description : ''}
                   required
                 >
                   {description}
@@ -278,24 +281,24 @@ const CreateProduct = ({ isVisible, handleClose, handleClickSave }) => {
               </GridItem>
               <GridItem col={6}>
                 {isSubscription ? (
-                  <Select
+                  <SingleSelect
                     id="select2"
                     label="Payment Interval"
                     required={isSubscription}
                     disabled={!isSubscription}
                     clearLabel="Clear the payment interval"
                     hint="Subscription billing frequency: weekly, monthly or yearly."
-                    error={error.paymentInterval ? error.paymentInterval : ""}
-                    onClear={() => setPaymentInterval("")}
-                    onChange={(value) => handleChangePaymentInterval(value)}
+                    error={error.paymentInterval ? error.paymentInterval : ''}
+                    onClear={() => setPaymentInterval('')}
+                    onChange={value => handleChangePaymentInterval(value)}
                     value={paymentInterval}
                   >
-                    <Option value="MONTH">Month</Option>
-                    <Option value="YEAR">Year</Option>
-                    <Option value="WEEK">Week</Option>
-                  </Select>
+                    <SingleSelectOption value="MONTH">Month</SingleSelectOption>
+                    <SingleSelectOption value="YEAR">Year</SingleSelectOption>
+                    <SingleSelectOption value="WEEK">Week</SingleSelectOption>
+                  </SingleSelect>
                 ) : (
-                  ""
+                  ''
                 )}
               </GridItem>
               <GridItem col={6}>
@@ -305,11 +308,11 @@ const CreateProduct = ({ isVisible, handleClose, handleClickSave }) => {
                     name="trialPeriodDays"
                     disabled={!isSubscription}
                     hint="Free trial period for the subscription."
-                    onValueChange={(value) => handleChangeTrialPeriod(value)}
+                    onValueChange={value => handleChangeTrialPeriod(value)}
                     value={trialPeriodDays}
                   />
                 ) : (
-                  ""
+                  ''
                 )}
               </GridItem>
             </Grid>

@@ -1,6 +1,6 @@
 {
   "name": "strapi-paypal",
-  "version": "1.0.4",
+  "version": "1.1.0",
   "description": "Online payments and subscriptions made simple, secure and fast.This free plugin enables you to accept online payments and create subscriptions using Paypal account or Credit/Debit card on your Strapi app via Paypal.",
   "strapi": {
     "name": "strapi-paypal",
@@ -14,7 +14,7 @@
     "qs": "^6.11.0"
   },
   "peerDependencies": {
-    "@strapi/strapi": "^4.4.5"
+    "@strapi/strapi": "^4.11.1"
   },
   "scripts": {
     "format": "npm-run-all -p format:*",

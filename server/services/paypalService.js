@@ -1,3 +1,4 @@
+// @ts-nocheck
 /* eslint-disable node/no-extraneous-require */
 /* eslint-disable node/no-missing-require */
 
@@ -6,9 +7,11 @@
 const { ApplicationError } = require('@strapi/utils').errors;
 const axiosInstance = require('axios');
 
+const paypalSandBoxUrl = process.env.STRAPI_ADMIN_PAYPAL_SANDBOX_API_URL;
+const paypalLiveUrl = process.env.STRAPI_ADMIN_PAYPAL_LIVE_API_URL;
+
 module.exports = ({ strapi }) => ({
   async initialize() {
-    const { paypalSandBoxUrl, paypalLiveUrl } = await strapi.config.get('plugin.strapi-paypal');
     const pluginStore = strapi.store({
       environment: strapi.config.environment,
       type: 'plugin',
